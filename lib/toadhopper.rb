@@ -4,7 +4,7 @@ require 'ostruct'
 
 # Posts errors to the Hoptoad API
 class Toadhopper
-  VERSION = "1.1"
+  VERSION = "1.1.0000001"
   FILTER_REPLACEMENT = "[FILTERED]"
   
   @@notifier_url = ENV['NOTIFIER_URL'] || "http://hoptoadapp.com"
