@@ -6,6 +6,8 @@ require 'ostruct'
 class Toadhopper
   VERSION = "1.1"
   FILTER_REPLACEMENT = "[FILTERED]"
+  
+  @@notifier_url = ENV['NOTIFIER_URL'] || "http://hoptoadapp.com"
 
   # Hoptoad API response
   class Response < Struct.new(:status, :body, :errors); end
@@ -68,7 +70,7 @@ class Toadhopper
     params['deploy[local_username]'] = options[:username] || %x(whoami).strip
     params['deploy[scm_repository]'] = options[:scm_repository]
     params['deploy[scm_revision]'] = options[:scm_revision]
-    response = Net::HTTP.post_form(URI.parse('http://hoptoadapp.com/deploys.txt'), params)
+    response = Net::HTTP.post_form(URI.parse("#{@@notifier_url}/deploys.txt"), params)
     parse_response(response)
   end
 
@@ -104,7 +106,7 @@ class Toadhopper
   end
 
   def post_document(document, headers={})
-    uri = URI.parse("http://hoptoadapp.com:80/notifier_api/v2/notices")
+    uri = URI.parse("#{@@notifier_url}/notifier_api/v2/notices")
     Net::HTTP.start(uri.host, uri.port) do |http|
       http.read_timeout = 5 # seconds
       http.open_timeout = 2 # seconds
